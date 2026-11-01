@@ -1,0 +1,137 @@
+{
+  "approval_gate": {
+    "failed_checks": [],
+    "result": "valid"
+  },
+  "change_context": {
+    "change_ref": "LAB-CHG-0009",
+    "environment": "lab-dev"
+  },
+  "change_set_digest": "sha256:f825c0502518beb8ae6712837d9d5927fdfff54be7db0f38549bfffb1ded4b28",
+  "decision": "BLOCKED",
+  "decision_basis": "BLOCKED: 4 blocking policy finding(s).",
+  "errors": [],
+  "evaluator": {
+    "name": "iac-change-control-lab",
+    "version": "0.1.0"
+  },
+  "evidence_schema": "iac-lab-evidence/v1",
+  "exit_code": 1,
+  "finding_counts": {
+    "blocking": 4,
+    "by_severity": {
+      "critical": 2,
+      "high": 3,
+      "low": 0,
+      "medium": 0
+    },
+    "non_blocking": 1,
+    "total": 5
+  },
+  "findings": [
+    {
+      "address": "labcloud_block_disk.old_cache",
+      "blocking": false,
+      "detail_key": "actions",
+      "reason": "proposed action list [delete] includes delete (deletion); fixture only, nothing was deleted",
+      "remediation": "Confirm intent and data retention, then obtain an elevated approval that lists this address.",
+      "requires_elevated_approval": true,
+      "rule_id": "IAC-CHG-001",
+      "severity": "high",
+      "title": "Destructive change proposed"
+    },
+    {
+      "address": "labcloud_storage_bucket.ops_exports",
+      "blocking": true,
+      "detail_key": "encryption",
+      "reason": "encryption block is missing or null",
+      "remediation": "Enable encryption with an allowlisted algorithm (aes-256-gcm, kms-managed) for this storage resource.",
+      "requires_elevated_approval": false,
+      "rule_id": "IAC-ENC-001",
+      "severity": "high",
+      "title": "Storage encryption missing or disallowed"
+    },
+    {
+      "address": "labcloud_iam_policy.ops_admin",
+      "blocking": true,
+      "detail_key": "statements[000]",
+      "reason": "Allow statement 0 grants Action \"*\"",
+      "remediation": "Replace wildcards with the specific actions and resource names the workload needs (least privilege).",
+      "requires_elevated_approval": false,
+      "rule_id": "IAC-IAM-001",
+      "severity": "critical",
+      "title": "Wildcard IAM action or resource"
+    },
+    {
+      "address": "labcloud_firewall_rule.admin_db",
+      "blocking": true,
+      "detail_key": "ingress",
+      "reason": "ingress from 0.0.0.0/0 exposes sensitive port(s) 5432 (tcp 5432-5432)",
+      "remediation": "Remove world access to sensitive ports; use a private source range or an access path outside this rule.",
+      "requires_elevated_approval": false,
+      "rule_id": "IAC-NET-001",
+      "severity": "critical",
+      "title": "Sensitive or all ports open to the world"
+    },
+    {
+      "address": "labcloud_block_disk.scratch",
+      "blocking": true,
+      "detail_key": "tags",
+      "reason": "required tag(s) missing or blank: owner, environment, cost_center",
+      "remediation": "Add non-blank values for every required tag key.",
+      "requires_elevated_approval": false,
+      "rule_id": "IAC-TAG-001",
+      "severity": "high",
+      "title": "Required tags missing or blank"
+    }
+  ],
+  "non_claims": [
+    "Inputs are synthetic fixtures, not real Terraform plans, state, or cloud resources.",
+    "No cloud account, credential, remote state, or provider was accessed.",
+    "Terraform was not executed: no init, plan, apply, destroy, import, or refresh occurred.",
+    "The rule set is illustrative and incomplete; it is not a policy engine replacement.",
+    "This is not a compliance control, audit result, or certification.",
+    "A PASS or WARN is not authorization to change infrastructure; human review is required."
+  ],
+  "notice": "SYNTHETIC / LOCAL FIXTURES ONLY. Every input to this evaluation is a synthetic, checked-in fixture; it is not output from a real Terraform plan or cloud account. This tool applies no infrastructure change: nothing was created, modified, or destroyed. A PASS or WARN decision is not authorization to change infrastructure; human review remains required.",
+  "plan_fixture_id": "plan-mixed-violations",
+  "resource_changes": [
+    {
+      "actions": [
+        "delete"
+      ],
+      "address": "labcloud_block_disk.old_cache",
+      "type": "labcloud_block_disk"
+    },
+    {
+      "actions": [
+        "create"
+      ],
+      "address": "labcloud_block_disk.scratch",
+      "type": "labcloud_block_disk"
+    },
+    {
+      "actions": [
+        "create"
+      ],
+      "address": "labcloud_firewall_rule.admin_db",
+      "type": "labcloud_firewall_rule"
+    },
+    {
+      "actions": [
+        "create"
+      ],
+      "address": "labcloud_iam_policy.ops_admin",
+      "type": "labcloud_iam_policy"
+    },
+    {
+      "actions": [
+        "create"
+      ],
+      "address": "labcloud_storage_bucket.ops_exports",
+      "type": "labcloud_storage_bucket"
+    }
+  ],
+  "run_id": "golden-mixed-violations",
+  "synthetic_inputs": true
+}

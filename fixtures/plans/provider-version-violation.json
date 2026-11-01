@@ -1,0 +1,53 @@
+{
+  "synthetic": true,
+  "contract_version": "iac-lab-plan/v1",
+  "fixture_id": "plan-provider-version-violation",
+  "description": "Synthetic change with Terraform version metadata below range, an out-of-range and unconstrained labcloud provider, and a non-allowlisted provider.",
+  "terraform_version": "1.5.7",
+  "change_context": {
+    "change_ref": "LAB-CHG-0008",
+    "environment": "lab-dev"
+  },
+  "configuration": {
+    "provider_config": {
+      "labcloud": {
+        "name": "labcloud",
+        "source": "registry.example/synthetic/labcloud",
+        "selected_version": "3.1.0"
+      },
+      "labdns": {
+        "name": "labdns",
+        "source": "registry.example/synthetic/labdns",
+        "version_constraint": "~> 1.0",
+        "selected_version": "1.0.2"
+      }
+    }
+  },
+  "resource_changes": [
+    {
+      "address": "labcloud_storage_bucket.app_assets",
+      "type": "labcloud_storage_bucket",
+      "name": "app_assets",
+      "provider_name": "labcloud",
+      "change": {
+        "actions": [
+          "create"
+        ],
+        "before": null,
+        "after": {
+          "bucket_name": "lab-app-assets",
+          "versioning": true,
+          "encryption": {
+            "enabled": true,
+            "algorithm": "aes-256-gcm"
+          },
+          "tags": {
+            "owner": "platform-lab",
+            "environment": "lab-dev",
+            "cost_center": "cc-lab-0001"
+          }
+        }
+      }
+    }
+  ]
+}

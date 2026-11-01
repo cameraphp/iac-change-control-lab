@@ -1,0 +1,94 @@
+{
+  "synthetic": true,
+  "contract_version": "iac-lab-plan/v1",
+  "fixture_id": "plan-unencrypted-storage",
+  "description": "Synthetic change with a disabled bucket encryption block, a null database encryption block and a disk using a disallowed algorithm.",
+  "terraform_version": "1.9.8",
+  "change_context": {
+    "change_ref": "LAB-CHG-0005",
+    "environment": "lab-dev"
+  },
+  "configuration": {
+    "provider_config": {
+      "labcloud": {
+        "name": "labcloud",
+        "source": "registry.example/synthetic/labcloud",
+        "version_constraint": "~> 2.4",
+        "selected_version": "2.4.1"
+      }
+    }
+  },
+  "resource_changes": [
+    {
+      "address": "labcloud_storage_bucket.app_logs",
+      "type": "labcloud_storage_bucket",
+      "name": "app_logs",
+      "provider_name": "labcloud",
+      "change": {
+        "actions": [
+          "create"
+        ],
+        "before": null,
+        "after": {
+          "bucket_name": "lab-app-logs",
+          "versioning": false,
+          "encryption": {
+            "enabled": false,
+            "algorithm": null
+          },
+          "tags": {
+            "owner": "platform-lab",
+            "environment": "lab-dev",
+            "cost_center": "cc-lab-0001"
+          }
+        }
+      }
+    },
+    {
+      "address": "labcloud_database_instance.reports",
+      "type": "labcloud_database_instance",
+      "name": "reports",
+      "provider_name": "labcloud",
+      "change": {
+        "actions": [
+          "create"
+        ],
+        "before": null,
+        "after": {
+          "engine": "labsql",
+          "instance_class": "lab.medium",
+          "encryption": null,
+          "tags": {
+            "owner": "platform-lab",
+            "environment": "lab-dev",
+            "cost_center": "cc-lab-0001"
+          }
+        }
+      }
+    },
+    {
+      "address": "labcloud_block_disk.scratch",
+      "type": "labcloud_block_disk",
+      "name": "scratch",
+      "provider_name": "labcloud",
+      "change": {
+        "actions": [
+          "create"
+        ],
+        "before": null,
+        "after": {
+          "size_gb": 50,
+          "encryption": {
+            "enabled": true,
+            "algorithm": "lab-legacy-cipher"
+          },
+          "tags": {
+            "owner": "platform-lab",
+            "environment": "lab-dev",
+            "cost_center": "cc-lab-0001"
+          }
+        }
+      }
+    }
+  ]
+}

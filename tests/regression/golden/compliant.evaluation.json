@@ -1,0 +1,88 @@
+{
+  "approval_gate": {
+    "failed_checks": [],
+    "result": "valid"
+  },
+  "change_context": {
+    "change_ref": "LAB-CHG-0001",
+    "environment": "lab-dev"
+  },
+  "change_set_digest": "sha256:5bbb2a3ba219b26a039ba22b03ca20c3794c3a7f9619a098b8e90c5b3bd2d73f",
+  "decision": "PASS",
+  "decision_basis": "PASS: no findings; approval gate valid. Human review is still required.",
+  "errors": [],
+  "evaluator": {
+    "name": "iac-change-control-lab",
+    "version": "0.1.0"
+  },
+  "evidence_schema": "iac-lab-evidence/v1",
+  "exit_code": 0,
+  "finding_counts": {
+    "blocking": 0,
+    "by_severity": {
+      "critical": 0,
+      "high": 0,
+      "low": 0,
+      "medium": 0
+    },
+    "non_blocking": 0,
+    "total": 0
+  },
+  "findings": [],
+  "non_claims": [
+    "Inputs are synthetic fixtures, not real Terraform plans, state, or cloud resources.",
+    "No cloud account, credential, remote state, or provider was accessed.",
+    "Terraform was not executed: no init, plan, apply, destroy, import, or refresh occurred.",
+    "The rule set is illustrative and incomplete; it is not a policy engine replacement.",
+    "This is not a compliance control, audit result, or certification.",
+    "A PASS or WARN is not authorization to change infrastructure; human review is required."
+  ],
+  "notice": "SYNTHETIC / LOCAL FIXTURES ONLY. Every input to this evaluation is a synthetic, checked-in fixture; it is not output from a real Terraform plan or cloud account. This tool applies no infrastructure change: nothing was created, modified, or destroyed. A PASS or WARN decision is not authorization to change infrastructure; human review remains required.",
+  "plan_fixture_id": "plan-compliant",
+  "resource_changes": [
+    {
+      "actions": [
+        "create"
+      ],
+      "address": "labcloud_block_disk.app_data",
+      "type": "labcloud_block_disk"
+    },
+    {
+      "actions": [
+        "no-op"
+      ],
+      "address": "labcloud_database_instance.orders",
+      "type": "labcloud_database_instance"
+    },
+    {
+      "actions": [
+        "update"
+      ],
+      "address": "labcloud_firewall_rule.db_internal",
+      "type": "labcloud_firewall_rule"
+    },
+    {
+      "actions": [
+        "create"
+      ],
+      "address": "labcloud_firewall_rule.web_https",
+      "type": "labcloud_firewall_rule"
+    },
+    {
+      "actions": [
+        "create"
+      ],
+      "address": "labcloud_iam_policy.app_read",
+      "type": "labcloud_iam_policy"
+    },
+    {
+      "actions": [
+        "create"
+      ],
+      "address": "labcloud_storage_bucket.app_assets",
+      "type": "labcloud_storage_bucket"
+    }
+  ],
+  "run_id": "golden-compliant",
+  "synthetic_inputs": true
+}

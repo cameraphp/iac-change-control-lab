@@ -1,0 +1,66 @@
+{
+  "synthetic": true,
+  "contract_version": "iac-lab-plan/v1",
+  "fixture_id": "plan-missing-tags",
+  "description": "Synthetic change with a blank owner tag, a missing cost_center tag and an untagged disk.",
+  "terraform_version": "1.9.8",
+  "change_context": {
+    "change_ref": "LAB-CHG-0007",
+    "environment": "lab-dev"
+  },
+  "configuration": {
+    "provider_config": {
+      "labcloud": {
+        "name": "labcloud",
+        "source": "registry.example/synthetic/labcloud",
+        "version_constraint": "~> 2.4",
+        "selected_version": "2.4.1"
+      }
+    }
+  },
+  "resource_changes": [
+    {
+      "address": "labcloud_storage_bucket.app_logs",
+      "type": "labcloud_storage_bucket",
+      "name": "app_logs",
+      "provider_name": "labcloud",
+      "change": {
+        "actions": [
+          "create"
+        ],
+        "before": null,
+        "after": {
+          "bucket_name": "lab-app-logs",
+          "versioning": true,
+          "encryption": {
+            "enabled": true,
+            "algorithm": "aes-256-gcm"
+          },
+          "tags": {
+            "owner": "   ",
+            "environment": "lab-dev"
+          }
+        }
+      }
+    },
+    {
+      "address": "labcloud_block_disk.cache",
+      "type": "labcloud_block_disk",
+      "name": "cache",
+      "provider_name": "labcloud",
+      "change": {
+        "actions": [
+          "create"
+        ],
+        "before": null,
+        "after": {
+          "size_gb": 20,
+          "encryption": {
+            "enabled": true,
+            "algorithm": "aes-256-gcm"
+          }
+        }
+      }
+    }
+  ]
+}

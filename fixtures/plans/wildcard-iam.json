@@ -1,0 +1,88 @@
+{
+  "synthetic": true,
+  "contract_version": "iac-lab-plan/v1",
+  "fixture_id": "plan-wildcard-iam",
+  "description": "Synthetic change adding an Allow statement with Action * and Resource *; a Deny * statement is present and must not be flagged.",
+  "terraform_version": "1.9.8",
+  "change_context": {
+    "change_ref": "LAB-CHG-0004",
+    "environment": "lab-dev"
+  },
+  "configuration": {
+    "provider_config": {
+      "labcloud": {
+        "name": "labcloud",
+        "source": "registry.example/synthetic/labcloud",
+        "version_constraint": "~> 2.4",
+        "selected_version": "2.4.1"
+      }
+    }
+  },
+  "resource_changes": [
+    {
+      "address": "labcloud_iam_policy.admin_everything",
+      "type": "labcloud_iam_policy",
+      "name": "admin_everything",
+      "provider_name": "labcloud",
+      "change": {
+        "actions": [
+          "create"
+        ],
+        "before": null,
+        "after": {
+          "policy_name": "lab-admin-everything",
+          "statements": [
+            {
+              "effect": "Allow",
+              "actions": [
+                "*"
+              ],
+              "resources": [
+                "*"
+              ]
+            },
+            {
+              "effect": "Deny",
+              "actions": [
+                "*"
+              ],
+              "resources": [
+                "lab:billing:account/lab-main"
+              ]
+            }
+          ],
+          "tags": {
+            "owner": "platform-lab",
+            "environment": "lab-dev",
+            "cost_center": "cc-lab-0001"
+          }
+        }
+      }
+    },
+    {
+      "address": "labcloud_storage_bucket.app_assets",
+      "type": "labcloud_storage_bucket",
+      "name": "app_assets",
+      "provider_name": "labcloud",
+      "change": {
+        "actions": [
+          "create"
+        ],
+        "before": null,
+        "after": {
+          "bucket_name": "lab-app-assets",
+          "versioning": true,
+          "encryption": {
+            "enabled": true,
+            "algorithm": "aes-256-gcm"
+          },
+          "tags": {
+            "owner": "platform-lab",
+            "environment": "lab-dev",
+            "cost_center": "cc-lab-0001"
+          }
+        }
+      }
+    }
+  ]
+}

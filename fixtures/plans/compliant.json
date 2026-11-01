@@ -1,0 +1,212 @@
+{
+  "synthetic": true,
+  "contract_version": "iac-lab-plan/v1",
+  "fixture_id": "plan-compliant",
+  "description": "Synthetic compliant change: HTTPS-only world ingress, private database rule, scoped IAM, encrypted and tagged storage.",
+  "terraform_version": "1.9.8",
+  "change_context": {
+    "change_ref": "LAB-CHG-0001",
+    "environment": "lab-dev"
+  },
+  "configuration": {
+    "provider_config": {
+      "labcloud": {
+        "name": "labcloud",
+        "source": "registry.example/synthetic/labcloud",
+        "version_constraint": "~> 2.4",
+        "selected_version": "2.4.1"
+      }
+    }
+  },
+  "resource_changes": [
+    {
+      "address": "labcloud_firewall_rule.web_https",
+      "type": "labcloud_firewall_rule",
+      "name": "web_https",
+      "provider_name": "labcloud",
+      "change": {
+        "actions": [
+          "create"
+        ],
+        "before": null,
+        "after": {
+          "direction": "ingress",
+          "protocol": "tcp",
+          "from_port": 443,
+          "to_port": 443,
+          "cidr_blocks": [
+            "0.0.0.0/0",
+            "::/0"
+          ],
+          "description": "public HTTPS (allowlisted port)",
+          "tags": {
+            "owner": "platform-lab",
+            "environment": "lab-dev",
+            "cost_center": "cc-lab-0001"
+          }
+        }
+      }
+    },
+    {
+      "address": "labcloud_firewall_rule.db_internal",
+      "type": "labcloud_firewall_rule",
+      "name": "db_internal",
+      "provider_name": "labcloud",
+      "change": {
+        "actions": [
+          "update"
+        ],
+        "before": {
+          "direction": "ingress",
+          "protocol": "tcp",
+          "from_port": 5432,
+          "to_port": 5432,
+          "cidr_blocks": [
+            "10.20.0.0/16"
+          ],
+          "description": "database from app subnet",
+          "tags": {
+            "owner": "platform-lab",
+            "environment": "lab-dev",
+            "cost_center": "cc-lab-0001"
+          }
+        },
+        "after": {
+          "direction": "ingress",
+          "protocol": "tcp",
+          "from_port": 5432,
+          "to_port": 5432,
+          "cidr_blocks": [
+            "10.20.0.0/16",
+            "10.30.0.0/16"
+          ],
+          "description": "database from app subnets",
+          "tags": {
+            "owner": "platform-lab",
+            "environment": "lab-dev",
+            "cost_center": "cc-lab-0001"
+          }
+        }
+      }
+    },
+    {
+      "address": "labcloud_iam_policy.app_read",
+      "type": "labcloud_iam_policy",
+      "name": "app_read",
+      "provider_name": "labcloud",
+      "change": {
+        "actions": [
+          "create"
+        ],
+        "before": null,
+        "after": {
+          "policy_name": "lab-app-read",
+          "statements": [
+            {
+              "effect": "Allow",
+              "actions": [
+                "storage:GetObject",
+                "storage:ListBucket"
+              ],
+              "resources": [
+                "lab:storage:bucket/lab-app-assets",
+                "lab:storage:bucket/lab-app-assets/*"
+              ]
+            }
+          ],
+          "tags": {
+            "owner": "platform-lab",
+            "environment": "lab-dev",
+            "cost_center": "cc-lab-0001"
+          }
+        }
+      }
+    },
+    {
+      "address": "labcloud_storage_bucket.app_assets",
+      "type": "labcloud_storage_bucket",
+      "name": "app_assets",
+      "provider_name": "labcloud",
+      "change": {
+        "actions": [
+          "create"
+        ],
+        "before": null,
+        "after": {
+          "bucket_name": "lab-app-assets",
+          "versioning": true,
+          "encryption": {
+            "enabled": true,
+            "algorithm": "aes-256-gcm"
+          },
+          "tags": {
+            "owner": "platform-lab",
+            "environment": "lab-dev",
+            "cost_center": "cc-lab-0001"
+          }
+        }
+      }
+    },
+    {
+      "address": "labcloud_database_instance.orders",
+      "type": "labcloud_database_instance",
+      "name": "orders",
+      "provider_name": "labcloud",
+      "change": {
+        "actions": [
+          "no-op"
+        ],
+        "before": {
+          "engine": "labsql",
+          "instance_class": "lab.small",
+          "encryption": {
+            "enabled": true,
+            "algorithm": "kms-managed"
+          },
+          "tags": {
+            "owner": "platform-lab",
+            "environment": "lab-dev",
+            "cost_center": "cc-lab-0001"
+          }
+        },
+        "after": {
+          "engine": "labsql",
+          "instance_class": "lab.small",
+          "encryption": {
+            "enabled": true,
+            "algorithm": "kms-managed"
+          },
+          "tags": {
+            "owner": "platform-lab",
+            "environment": "lab-dev",
+            "cost_center": "cc-lab-0001"
+          }
+        }
+      }
+    },
+    {
+      "address": "labcloud_block_disk.app_data",
+      "type": "labcloud_block_disk",
+      "name": "app_data",
+      "provider_name": "labcloud",
+      "change": {
+        "actions": [
+          "create"
+        ],
+        "before": null,
+        "after": {
+          "size_gb": 100,
+          "encryption": {
+            "enabled": true,
+            "algorithm": "aes-256-gcm"
+          },
+          "tags": {
+            "owner": "platform-lab",
+            "environment": "lab-dev",
+            "cost_center": "cc-lab-0001"
+          }
+        }
+      }
+    }
+  ]
+}

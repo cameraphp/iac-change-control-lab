@@ -1,0 +1,115 @@
+{
+  "synthetic": true,
+  "contract_version": "iac-lab-plan/v1",
+  "fixture_id": "plan-destroy-change",
+  "description": "Synthetic change proposing one deletion and one replacement. Proposed only: nothing is deleted.",
+  "terraform_version": "1.9.8",
+  "change_context": {
+    "change_ref": "LAB-CHG-0006",
+    "environment": "lab-dev"
+  },
+  "configuration": {
+    "provider_config": {
+      "labcloud": {
+        "name": "labcloud",
+        "source": "registry.example/synthetic/labcloud",
+        "version_constraint": "~> 2.4",
+        "selected_version": "2.4.1"
+      }
+    }
+  },
+  "resource_changes": [
+    {
+      "address": "labcloud_block_disk.legacy_scratch",
+      "type": "labcloud_block_disk",
+      "name": "legacy_scratch",
+      "provider_name": "labcloud",
+      "change": {
+        "actions": [
+          "delete"
+        ],
+        "before": {
+          "size_gb": 200,
+          "encryption": {
+            "enabled": true,
+            "algorithm": "aes-256-gcm"
+          },
+          "tags": {
+            "owner": "platform-lab",
+            "environment": "lab-dev",
+            "cost_center": "cc-lab-0001"
+          }
+        },
+        "after": null
+      }
+    },
+    {
+      "address": "labcloud_firewall_rule.web_https",
+      "type": "labcloud_firewall_rule",
+      "name": "web_https",
+      "provider_name": "labcloud",
+      "change": {
+        "actions": [
+          "delete",
+          "create"
+        ],
+        "before": {
+          "direction": "ingress",
+          "protocol": "tcp",
+          "from_port": 443,
+          "to_port": 443,
+          "cidr_blocks": [
+            "0.0.0.0/0"
+          ],
+          "description": "public HTTPS (IPv4 only)",
+          "tags": {
+            "owner": "platform-lab",
+            "environment": "lab-dev",
+            "cost_center": "cc-lab-0001"
+          }
+        },
+        "after": {
+          "direction": "ingress",
+          "protocol": "tcp",
+          "from_port": 443,
+          "to_port": 443,
+          "cidr_blocks": [
+            "0.0.0.0/0",
+            "::/0"
+          ],
+          "description": "public HTTPS (allowlisted port)",
+          "tags": {
+            "owner": "platform-lab",
+            "environment": "lab-dev",
+            "cost_center": "cc-lab-0001"
+          }
+        }
+      }
+    },
+    {
+      "address": "labcloud_storage_bucket.app_assets",
+      "type": "labcloud_storage_bucket",
+      "name": "app_assets",
+      "provider_name": "labcloud",
+      "change": {
+        "actions": [
+          "create"
+        ],
+        "before": null,
+        "after": {
+          "bucket_name": "lab-app-assets",
+          "versioning": true,
+          "encryption": {
+            "enabled": true,
+            "algorithm": "aes-256-gcm"
+          },
+          "tags": {
+            "owner": "platform-lab",
+            "environment": "lab-dev",
+            "cost_center": "cc-lab-0001"
+          }
+        }
+      }
+    }
+  ]
+}

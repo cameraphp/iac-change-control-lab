@@ -1,0 +1,16 @@
+{
+  "synthetic": true,
+  "contract_version": "iac-lab-approval/v1",
+  "approval_id": "APR-LAB-0012",
+  "status": "rejected",
+  "scope": {
+    "change_ref": "LAB-CHG-0001",
+    "environment": "lab-dev"
+  },
+  "change_set_digest": "sha256:5bbb2a3ba219b26a039ba22b03ca20c3794c3a7f9619a098b8e90c5b3bd2d73f",
+  "policy_version": "1.0.0",
+  "approval_level": "standard",
+  "approver_role": "synthetic-change-reviewer",
+  "approved_destructive_addresses": [],
+  "notes": "Synthetic reviewer rejected this change."
+}

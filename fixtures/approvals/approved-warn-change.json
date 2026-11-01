@@ -1,0 +1,16 @@
+{
+  "synthetic": true,
+  "contract_version": "iac-lab-approval/v1",
+  "approval_id": "APR-LAB-0002",
+  "status": "approved",
+  "scope": {
+    "change_ref": "LAB-CHG-0002",
+    "environment": "lab-dev"
+  },
+  "change_set_digest": "sha256:94d1728818157d023411274d9a33e3664bbb2ee1221a8dc8730547dcabce0a2c",
+  "policy_version": "1.0.0",
+  "approval_level": "standard",
+  "approver_role": "synthetic-change-reviewer",
+  "approved_destructive_addresses": [],
+  "notes": "Synthetic standard approval for the WARN fixture."
+}

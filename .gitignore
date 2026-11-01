@@ -1,0 +1,34 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+
+# Local environment and tooling caches
+.venv/
+.pytest_cache/
+.ruff_cache/
+
+# Generated evidence bundles (regenerate with the CLI or demo); keep only the README
+evidence/*
+!evidence/README.md
+
+# Secrets: never commit. This project needs none.
+.env
+.env.*
+
+# Terraform working directories, state, plans and variable files (never used by this lab)
+.terraform/
+.terraform.lock.hcl
+*.tfstate
+*.tfstate.*
+*.tfplan
+*.tfvars
+*.tfvars.json
+crash.log
+crash.*.log
+
+# Logs and other generated data
+*.log
+generated/

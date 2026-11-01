@@ -1,0 +1,11 @@
+{
+  "synthetic": true,
+  "contract_version": "iac-lab-approval/v1",
+  "approval_id": "APR-LAB-0011",
+  "status": "not_submitted",
+  "scope": {
+    "change_ref": "LAB-CHG-0001",
+    "environment": "lab-dev"
+  },
+  "notes": "No approval has been submitted for this change."
+}

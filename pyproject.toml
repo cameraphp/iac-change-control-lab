@@ -1,0 +1,34 @@
+[build-system]
+requires = ["setuptools==80.9.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "iac-change-control-lab"
+version = "0.1.0"
+description = "Local, fixture-driven policy-and-evidence gate for synthetic Terraform-plan-like JSON. Lab only: no cloud, no credentials, no apply."
+readme = "README.md"
+requires-python = ">=3.11"
+# Runtime: Python standard library only (NFR-003). No license selected yet (owner decision).
+dependencies = []
+
+[project.optional-dependencies]
+dev = [
+    "pytest==9.1.1",
+    "ruff==0.16.9",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+extend-exclude = [".venv", "evidence"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B", "SIM"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src", "tests"]
+addopts = "-p no:cacheprovider"

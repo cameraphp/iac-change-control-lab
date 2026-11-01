@@ -1,0 +1,35 @@
+{
+  "description": "Golden fixture outcome matrix (validation.md section 2.2) and pinned change-set digests. Synthetic fixtures only.",
+  "digests": {
+    "compliant": "sha256:5bbb2a3ba219b26a039ba22b03ca20c3794c3a7f9619a098b8e90c5b3bd2d73f",
+    "destroy-change": "sha256:3f834275c249f47a6547d7b6604e2b9934e6b84f27bbd825c3fcf4f2acbb6ad3",
+    "missing-tags": "sha256:2a7fb53b7efea1eb1d790a7814e0deaae732f3f50d690c2c0ad3cbb989910f2b",
+    "mixed-violations": "sha256:f825c0502518beb8ae6712837d9d5927fdfff54be7db0f38549bfffb1ded4b28",
+    "provider-version-violation": "sha256:f4da43e30364a02bd1d1ffd5eafef92cea30850ad579c75ecfee633910136aa5",
+    "public-ingress": "sha256:8608513d578420e661f64f00726add2293271dba1da5b28d3e46b4623ab22abb",
+    "unencrypted-storage": "sha256:e345f3fcb7a3022d0d341c6f56585f3a021920cc2f60369810c2404f7ab12ff6",
+    "warn-nonstandard-port": "sha256:94d1728818157d023411274d9a33e3664bbb2ee1221a8dc8730547dcabce0a2c",
+    "wildcard-iam": "sha256:b977a627fa8e2c72cc279ba86645bc39cb5f13626845e952b372809cf9ead558"
+  },
+  "cases": [
+    {"row": 1, "plan": "compliant", "approval": "approved-change", "policy": null, "decision": "PASS", "exit_code": 0, "rule_ids": [], "error_codes": []},
+    {"row": 2, "plan": "warn-nonstandard-port", "approval": "approved-warn-change", "policy": null, "decision": "WARN", "exit_code": 0, "rule_ids": ["IAC-IAM-002", "IAC-NET-002"], "error_codes": []},
+    {"row": 3, "plan": "public-ingress", "approval": "approved-public-ingress", "policy": null, "decision": "BLOCKED", "exit_code": 1, "rule_ids": ["IAC-NET-001", "IAC-NET-001"], "error_codes": []},
+    {"row": 4, "plan": "wildcard-iam", "approval": "approved-wildcard-iam", "policy": null, "decision": "BLOCKED", "exit_code": 1, "rule_ids": ["IAC-IAM-001"], "error_codes": []},
+    {"row": 5, "plan": "unencrypted-storage", "approval": "approved-unencrypted-storage", "policy": null, "decision": "BLOCKED", "exit_code": 1, "rule_ids": ["IAC-ENC-001", "IAC-ENC-001", "IAC-ENC-001"], "error_codes": []},
+    {"row": 6, "plan": "destroy-change", "approval": "approved-destroy-standard", "policy": null, "decision": "BLOCKED", "exit_code": 1, "rule_ids": ["IAC-APR-006", "IAC-CHG-001", "IAC-CHG-001"], "error_codes": []},
+    {"row": 7, "plan": "destroy-change", "approval": "approved-destroy-elevated", "policy": null, "decision": "WARN", "exit_code": 0, "rule_ids": ["IAC-CHG-001", "IAC-CHG-001"], "error_codes": []},
+    {"row": 8, "plan": "missing-tags", "approval": "approved-missing-tags", "policy": null, "decision": "BLOCKED", "exit_code": 1, "rule_ids": ["IAC-TAG-001", "IAC-TAG-001"], "error_codes": []},
+    {"row": 9, "plan": "provider-version-violation", "approval": "approved-provider-version-violation", "policy": null, "decision": "BLOCKED", "exit_code": 1, "rule_ids": ["IAC-VER-001", "IAC-VER-002", "IAC-VER-003", "IAC-VER-004"], "error_codes": []},
+    {"row": 10, "plan": "mixed-violations", "approval": "approved-mixed-violations", "policy": null, "decision": "BLOCKED", "exit_code": 1, "rule_ids": ["IAC-CHG-001", "IAC-ENC-001", "IAC-IAM-001", "IAC-NET-001", "IAC-TAG-001"], "error_codes": []},
+    {"row": 11, "plan": "compliant", "approval": "missing-approval", "policy": null, "decision": "BLOCKED", "exit_code": 1, "rule_ids": ["IAC-APR-001"], "error_codes": []},
+    {"row": 12, "plan": "compliant", "approval": null, "policy": null, "decision": "BLOCKED", "exit_code": 1, "rule_ids": ["IAC-APR-001"], "error_codes": []},
+    {"row": 13, "plan": "compliant", "approval": "rejected-approval", "policy": null, "decision": "BLOCKED", "exit_code": 1, "rule_ids": ["IAC-APR-002"], "error_codes": []},
+    {"row": 14, "plan": "compliant", "approval": "stale-or-out-of-scope-approval", "policy": null, "decision": "BLOCKED", "exit_code": 1, "rule_ids": ["IAC-APR-003", "IAC-APR-004"], "error_codes": []},
+    {"row": 15, "plan": "compliant", "approval": "digest-mismatch-approval", "policy": null, "decision": "BLOCKED", "exit_code": 1, "rule_ids": ["IAC-APR-005"], "error_codes": []},
+    {"row": 16, "plan": "public-ingress", "approval": "approved-change", "policy": null, "decision": "BLOCKED", "exit_code": 1, "rule_ids": ["IAC-APR-004", "IAC-APR-005", "IAC-NET-001", "IAC-NET-001"], "error_codes": []},
+    {"row": 17, "plan": "malformed", "approval": "approved-change", "policy": null, "decision": "ERROR", "exit_code": 2, "rule_ids": [], "error_codes": ["json_parse_error"]},
+    {"row": 18, "plan": "unsupported-resource", "approval": "approved-change", "policy": null, "decision": "ERROR", "exit_code": 2, "rule_ids": [], "error_codes": ["unsupported_resource_type"]},
+    {"row": 19, "plan": "compliant", "approval": "approved-change", "policy": "fixtures/policies/invalid-policy.json", "decision": "ERROR", "exit_code": 2, "rule_ids": [], "error_codes": ["invalid_version_range", "port_overlap"]}
+  ]
+}

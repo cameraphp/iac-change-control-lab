@@ -1,0 +1,8 @@
+{
+  "synthetic": true,
+  "contract_version": "iac-lab-plan/v1",
+  "fixture_id": "plan-malformed",
+  "description": "Deliberately truncated JSON; must be ERROR.",
+  "resource_changes": [
+    {
+      "address": "labcloud_block_disk.data",

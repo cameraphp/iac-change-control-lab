@@ -1,0 +1,16 @@
+{
+  "synthetic": true,
+  "contract_version": "iac-lab-approval/v1",
+  "approval_id": "APR-LAB-0005",
+  "status": "approved",
+  "scope": {
+    "change_ref": "LAB-CHG-0005",
+    "environment": "lab-dev"
+  },
+  "change_set_digest": "sha256:e345f3fcb7a3022d0d341c6f56585f3a021920cc2f60369810c2404f7ab12ff6",
+  "policy_version": "1.0.0",
+  "approval_level": "standard",
+  "approver_role": "synthetic-change-reviewer",
+  "approved_destructive_addresses": [],
+  "notes": "Fully valid synthetic approval; it must NOT suppress IAC-ENC-001."
+}

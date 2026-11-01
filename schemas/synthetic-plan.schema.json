@@ -1,0 +1,265 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:iac-change-control-lab:schema:synthetic-plan:v1",
+  "title": "Synthetic Terraform-plan-like fixture (iac-lab-plan/v1)",
+  "description": "Limited, lab-only contract. Borrows Terraform plan field names but is NOT real Terraform plan JSON. Every value is synthetic. Semantic rules not expressible here (address = type.name, unique addresses, provider references, action/before/after consistency, reserved CIDR ranges, credential-like keys) are enforced by plan_loader.py; see docs/fixture-contract.md.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "synthetic",
+    "contract_version",
+    "fixture_id",
+    "description",
+    "terraform_version",
+    "change_context",
+    "configuration",
+    "resource_changes"
+  ],
+  "properties": {
+    "synthetic": { "const": true },
+    "contract_version": { "const": "iac-lab-plan/v1" },
+    "fixture_id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]{0,63}$" },
+    "description": { "type": "string", "maxLength": 300 },
+    "terraform_version": { "$ref": "#/$defs/semver" },
+    "change_context": { "$ref": "#/$defs/change_context" },
+    "configuration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["provider_config"],
+      "properties": {
+        "provider_config": {
+          "type": "object",
+          "minProperties": 1,
+          "propertyNames": { "$ref": "#/$defs/provider_key" },
+          "additionalProperties": { "$ref": "#/$defs/provider" }
+        }
+      }
+    },
+    "resource_changes": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 200,
+      "items": { "$ref": "#/$defs/resource_change" }
+    }
+  },
+  "$defs": {
+    "semver": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$"
+    },
+    "provider_key": { "type": "string", "pattern": "^[a-z][a-z0-9]{1,30}$" },
+    "change_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["change_ref", "environment"],
+      "properties": {
+        "change_ref": { "type": "string", "pattern": "^LAB-CHG-[0-9]{4}$" },
+        "environment": { "type": "string", "pattern": "^lab-[a-z0-9-]{1,30}$" }
+      }
+    },
+    "provider": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "source", "selected_version"],
+      "properties": {
+        "name": { "$ref": "#/$defs/provider_key" },
+        "source": {
+          "type": "string",
+          "description": "Must live under the reserved .example TLD (RFC 2606).",
+          "pattern": "^[a-z0-9-]+(\\.[a-z0-9-]+)*\\.example/[a-z0-9-]+/[a-z0-9-]+$"
+        },
+        "version_constraint": {
+          "type": "string",
+          "description": "Optional; a missing or blank value yields policy finding IAC-VER-004.",
+          "pattern": "^[0-9<>=~!,. ]{0,40}$"
+        },
+        "selected_version": { "$ref": "#/$defs/semver" }
+      }
+    },
+    "resource_change": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["address", "type", "name", "provider_name", "change"],
+      "properties": {
+        "address": {
+          "type": "string",
+          "pattern": "^labcloud_[a-z_]{1,40}\\.[a-z][a-z0-9_]{0,62}$"
+        },
+        "type": {
+          "enum": [
+            "labcloud_block_disk",
+            "labcloud_database_instance",
+            "labcloud_firewall_rule",
+            "labcloud_iam_policy",
+            "labcloud_storage_bucket"
+          ]
+        },
+        "name": { "type": "string", "pattern": "^[a-z][a-z0-9_]{0,62}$" },
+        "provider_name": { "$ref": "#/$defs/provider_key" },
+        "change": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["actions", "before", "after"],
+          "properties": {
+            "actions": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 2,
+              "items": { "enum": ["create", "delete", "no-op", "read", "update"] }
+            },
+            "before": { "type": ["object", "null"] },
+            "after": { "type": ["object", "null"] }
+          }
+        }
+      },
+      "allOf": [
+        { "$ref": "#/$defs/branch_firewall" },
+        { "$ref": "#/$defs/branch_iam" },
+        { "$ref": "#/$defs/branch_bucket" },
+        { "$ref": "#/$defs/branch_database" },
+        { "$ref": "#/$defs/branch_disk" }
+      ]
+    },
+    "branch_firewall": {
+      "if": { "required": ["type"], "properties": { "type": { "const": "labcloud_firewall_rule" } } },
+      "then": { "properties": { "change": { "properties": {
+        "before": { "if": { "type": "object" }, "then": { "$ref": "#/$defs/firewall_attributes" } },
+        "after": { "if": { "type": "object" }, "then": { "$ref": "#/$defs/firewall_attributes" } }
+      } } } }
+    },
+    "branch_iam": {
+      "if": { "required": ["type"], "properties": { "type": { "const": "labcloud_iam_policy" } } },
+      "then": { "properties": { "change": { "properties": {
+        "before": { "if": { "type": "object" }, "then": { "$ref": "#/$defs/iam_policy_attributes" } },
+        "after": { "if": { "type": "object" }, "then": { "$ref": "#/$defs/iam_policy_attributes" } }
+      } } } }
+    },
+    "branch_bucket": {
+      "if": { "required": ["type"], "properties": { "type": { "const": "labcloud_storage_bucket" } } },
+      "then": { "properties": { "change": { "properties": {
+        "before": { "if": { "type": "object" }, "then": { "$ref": "#/$defs/bucket_attributes" } },
+        "after": { "if": { "type": "object" }, "then": { "$ref": "#/$defs/bucket_attributes" } }
+      } } } }
+    },
+    "branch_database": {
+      "if": { "required": ["type"], "properties": { "type": { "const": "labcloud_database_instance" } } },
+      "then": { "properties": { "change": { "properties": {
+        "before": { "if": { "type": "object" }, "then": { "$ref": "#/$defs/database_attributes" } },
+        "after": { "if": { "type": "object" }, "then": { "$ref": "#/$defs/database_attributes" } }
+      } } } }
+    },
+    "branch_disk": {
+      "if": { "required": ["type"], "properties": { "type": { "const": "labcloud_block_disk" } } },
+      "then": { "properties": { "change": { "properties": {
+        "before": { "if": { "type": "object" }, "then": { "$ref": "#/$defs/disk_attributes" } },
+        "after": { "if": { "type": "object" }, "then": { "$ref": "#/$defs/disk_attributes" } }
+      } } } }
+    },
+    "tags": {
+      "type": "object",
+      "propertyNames": { "type": "string", "pattern": "^[a-z][a-z0-9_]{0,62}$" },
+      "additionalProperties": { "type": "string", "maxLength": 128 }
+    },
+    "encryption": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "required": ["enabled", "algorithm"],
+      "properties": {
+        "enabled": { "type": ["boolean", "null"] },
+        "algorithm": { "type": ["string", "null"], "pattern": "^[a-z0-9-]{1,40}$" }
+      }
+    },
+    "port": { "type": "integer", "minimum": 0, "maximum": 65535 },
+    "firewall_attributes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["direction", "protocol", "from_port", "to_port", "cidr_blocks"],
+      "properties": {
+        "direction": { "enum": ["egress", "ingress"] },
+        "protocol": { "enum": ["all", "tcp", "udp"] },
+        "from_port": { "$ref": "#/$defs/port" },
+        "to_port": { "$ref": "#/$defs/port" },
+        "cidr_blocks": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 16,
+          "uniqueItems": true,
+          "items": { "type": "string", "maxLength": 43 }
+        },
+        "description": { "type": "string", "maxLength": 200 },
+        "tags": { "$ref": "#/$defs/tags" }
+      }
+    },
+    "iam_policy_attributes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["policy_name", "statements"],
+      "properties": {
+        "policy_name": { "type": "string", "pattern": "^[a-z][a-z0-9-]{0,62}$" },
+        "statements": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 20,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["effect", "actions", "resources"],
+            "properties": {
+              "effect": { "enum": ["Allow", "Deny"] },
+              "actions": {
+                "type": "array",
+                "minItems": 1,
+                "maxItems": 20,
+                "uniqueItems": true,
+                "items": {
+                  "type": "string",
+                  "pattern": "^(\\*|[a-z][a-z0-9-]*:(\\*|[A-Za-z][A-Za-z0-9]*))$"
+                }
+              },
+              "resources": {
+                "type": "array",
+                "minItems": 1,
+                "maxItems": 20,
+                "uniqueItems": true,
+                "items": { "type": "string", "pattern": "^(\\*|lab:[a-z0-9-]+:[a-z0-9_/*:.-]+)$" }
+              }
+            }
+          }
+        },
+        "tags": { "$ref": "#/$defs/tags" }
+      }
+    },
+    "bucket_attributes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["bucket_name"],
+      "properties": {
+        "bucket_name": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]{2,62}$" },
+        "versioning": { "type": "boolean" },
+        "encryption": { "$ref": "#/$defs/encryption" },
+        "tags": { "$ref": "#/$defs/tags" }
+      }
+    },
+    "database_attributes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["engine", "instance_class"],
+      "properties": {
+        "engine": { "enum": ["labsql"] },
+        "instance_class": { "type": "string", "pattern": "^lab\\.[a-z0-9]{1,20}$" },
+        "encryption": { "$ref": "#/$defs/encryption" },
+        "tags": { "$ref": "#/$defs/tags" }
+      }
+    },
+    "disk_attributes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["size_gb"],
+      "properties": {
+        "size_gb": { "type": "integer", "minimum": 1, "maximum": 16384 },
+        "encryption": { "$ref": "#/$defs/encryption" },
+        "tags": { "$ref": "#/$defs/tags" }
+      }
+    }
+  }
+}

@@ -1,0 +1,12 @@
+# Resolved dev toolchain for iac-change-control-lab (Python 3.13.7, Windows).
+# Generated with: python -m pip freeze --all   (inside the project .venv)
+# Runtime dependencies: none (standard library only).
+colorama==0.4.6
+iniconfig==2.3.1
+packaging==26.3
+pip==25.2
+pluggy==1.7.0
+Pygments==2.21.0
+pytest==9.1.1
+ruff==0.16.9
+setuptools==80.9.0

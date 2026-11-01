@@ -1,0 +1,18 @@
+{
+  "synthetic": true,
+  "contract_version": "iac-lab-approval/v1",
+  "approval_id": "APR-LAB-0010",
+  "status": "approved",
+  "scope": {
+    "change_ref": "LAB-CHG-0009",
+    "environment": "lab-dev"
+  },
+  "change_set_digest": "sha256:f825c0502518beb8ae6712837d9d5927fdfff54be7db0f38549bfffb1ded4b28",
+  "policy_version": "1.0.0",
+  "approval_level": "elevated",
+  "approver_role": "synthetic-elevated-reviewer",
+  "approved_destructive_addresses": [
+    "labcloud_block_disk.old_cache"
+  ],
+  "notes": "Fully valid elevated synthetic approval; hard violations must still block."
+}

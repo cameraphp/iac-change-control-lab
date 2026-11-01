@@ -1,0 +1,105 @@
+{
+  "synthetic": true,
+  "contract_version": "iac-lab-plan/v1",
+  "fixture_id": "plan-public-ingress",
+  "description": "Synthetic change exposing SSH to 0.0.0.0/0 and all ports to ::/0.",
+  "terraform_version": "1.9.8",
+  "change_context": {
+    "change_ref": "LAB-CHG-0003",
+    "environment": "lab-dev"
+  },
+  "configuration": {
+    "provider_config": {
+      "labcloud": {
+        "name": "labcloud",
+        "source": "registry.example/synthetic/labcloud",
+        "version_constraint": "~> 2.4",
+        "selected_version": "2.4.1"
+      }
+    }
+  },
+  "resource_changes": [
+    {
+      "address": "labcloud_firewall_rule.web_https",
+      "type": "labcloud_firewall_rule",
+      "name": "web_https",
+      "provider_name": "labcloud",
+      "change": {
+        "actions": [
+          "create"
+        ],
+        "before": null,
+        "after": {
+          "direction": "ingress",
+          "protocol": "tcp",
+          "from_port": 443,
+          "to_port": 443,
+          "cidr_blocks": [
+            "0.0.0.0/0",
+            "::/0"
+          ],
+          "description": "public HTTPS (allowlisted port)",
+          "tags": {
+            "owner": "platform-lab",
+            "environment": "lab-dev",
+            "cost_center": "cc-lab-0001"
+          }
+        }
+      }
+    },
+    {
+      "address": "labcloud_firewall_rule.admin_ssh",
+      "type": "labcloud_firewall_rule",
+      "name": "admin_ssh",
+      "provider_name": "labcloud",
+      "change": {
+        "actions": [
+          "create"
+        ],
+        "before": null,
+        "after": {
+          "direction": "ingress",
+          "protocol": "tcp",
+          "from_port": 22,
+          "to_port": 22,
+          "cidr_blocks": [
+            "0.0.0.0/0"
+          ],
+          "description": "admin SSH from anywhere",
+          "tags": {
+            "owner": "platform-lab",
+            "environment": "lab-dev",
+            "cost_center": "cc-lab-0001"
+          }
+        }
+      }
+    },
+    {
+      "address": "labcloud_firewall_rule.debug_all",
+      "type": "labcloud_firewall_rule",
+      "name": "debug_all",
+      "provider_name": "labcloud",
+      "change": {
+        "actions": [
+          "create"
+        ],
+        "before": null,
+        "after": {
+          "direction": "ingress",
+          "protocol": "all",
+          "from_port": 0,
+          "to_port": 65535,
+          "cidr_blocks": [
+            "::/0"
+          ],
+          "description": "temporary debug rule",
+          "tags": {
+            "owner": "platform-lab",
+            "environment": "lab-dev",
+            "cost_center": "cc-lab-0001"
+          }
+        }
+      }
+    }
+  ]
+}

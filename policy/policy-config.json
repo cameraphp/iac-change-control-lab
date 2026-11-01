@@ -1,0 +1,28 @@
+{
+  "synthetic": true,
+  "contract_version": "iac-lab-policy/v1",
+  "policy_id": "lab-baseline",
+  "policy_version": "1.0.0",
+  "description": "Synthetic baseline policy for the iac-change-control-lab fixtures. Illustrative only; not a complete or production policy.",
+  "terraform_version": {
+    "min_inclusive": "1.6.0",
+    "max_exclusive": "2.0.0"
+  },
+  "provider_allowlist": {
+    "labcloud": {
+      "source": "registry.example/synthetic/labcloud",
+      "min_inclusive": "2.4.0",
+      "max_exclusive": "3.0.0"
+    }
+  },
+  "public_ingress": {
+    "sensitive_ports": [22, 1433, 3306, 3389, 5432, 6379, 9200, 27017],
+    "allowed_public_ports": [80, 443]
+  },
+  "storage_encryption": {
+    "allowed_algorithms": ["aes-256-gcm", "kms-managed"]
+  },
+  "required_tags": {
+    "keys": ["owner", "environment", "cost_center"]
+  }
+}

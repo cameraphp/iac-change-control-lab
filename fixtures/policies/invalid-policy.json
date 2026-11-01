@@ -1,0 +1,28 @@
+{
+  "synthetic": true,
+  "contract_version": "iac-lab-policy/v1",
+  "policy_id": "lab-invalid",
+  "policy_version": "1.0.0",
+  "description": "Deliberately invalid synthetic policy: schema-valid, but its Terraform range is inverted and port 443 is both sensitive and allowed-public. Must yield ERROR.",
+  "terraform_version": {
+    "min_inclusive": "2.0.0",
+    "max_exclusive": "1.6.0"
+  },
+  "provider_allowlist": {
+    "labcloud": {
+      "source": "registry.example/synthetic/labcloud",
+      "min_inclusive": "2.4.0",
+      "max_exclusive": "3.0.0"
+    }
+  },
+  "public_ingress": {
+    "sensitive_ports": [22, 443],
+    "allowed_public_ports": [80, 443]
+  },
+  "storage_encryption": {
+    "allowed_algorithms": ["aes-256-gcm"]
+  },
+  "required_tags": {
+    "keys": ["owner"]
+  }
+}

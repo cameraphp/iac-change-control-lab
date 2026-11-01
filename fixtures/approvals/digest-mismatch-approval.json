@@ -1,0 +1,16 @@
+{
+  "synthetic": true,
+  "contract_version": "iac-lab-approval/v1",
+  "approval_id": "APR-LAB-0014",
+  "status": "approved",
+  "scope": {
+    "change_ref": "LAB-CHG-0001",
+    "environment": "lab-dev"
+  },
+  "change_set_digest": "sha256:883352b0f2adbe13ca690b627e423ad50fe845d86a6ba6760c7578b55d9e9b59",
+  "policy_version": "1.0.0",
+  "approval_level": "standard",
+  "approver_role": "synthetic-change-reviewer",
+  "approved_destructive_addresses": [],
+  "notes": "Granted for an earlier revision of the change set (bucket versioning differed)."
+}

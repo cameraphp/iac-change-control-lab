@@ -1,0 +1,19 @@
+{
+  "synthetic": true,
+  "contract_version": "iac-lab-approval/v1",
+  "approval_id": "APR-LAB-0007",
+  "status": "approved",
+  "scope": {
+    "change_ref": "LAB-CHG-0006",
+    "environment": "lab-dev"
+  },
+  "change_set_digest": "sha256:3f834275c249f47a6547d7b6604e2b9934e6b84f27bbd825c3fcf4f2acbb6ad3",
+  "policy_version": "1.0.0",
+  "approval_level": "elevated",
+  "approver_role": "synthetic-elevated-reviewer",
+  "approved_destructive_addresses": [
+    "labcloud_block_disk.legacy_scratch",
+    "labcloud_firewall_rule.web_https"
+  ],
+  "notes": "Elevated synthetic approval listing every destructive address."
+}
